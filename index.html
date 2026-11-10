@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Misiones</title>
+<style>
+  body { margin:0; background:#eef5ff; }
+  .cm { font-family:'Segoe UI',Arial,sans-serif; max-width:1100px; margin:auto; padding:16px; color:#0f172a; }
+  .cm * { box-sizing:border-box; }
+  .cm h2 { margin:0 0 12px; }
+
+  .cm-top { background:linear-gradient(135deg,#0b1f4d,#1e3a8a,#0e7490); background-size:200% 200%;
+    animation:cmFondo 10s ease infinite; color:#fff; padding:34px 28px; border-radius:25px;
+    box-shadow:0 8px 25px rgba(0,0,0,.25); text-align:center; }
+  @keyframes cmFondo { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
+  .cm-top h1 { margin:0 0 8px; font-size:32px; }
+  .cm-top p { margin:0; font-size:17px; opacity:.95; }
+
+  .cm-volver { display:inline-block; padding:8px 18px; border-radius:30px; background:#e2e8f0; color:#1e3a8a;
+    font-weight:600; text-decoration:none; transition:all .25s; }
+  .cm-volver:hover { background:#1e3a8a; color:#fff; transform:translateY(-3px); }
+  .cm-nav { display:flex; flex-wrap:wrap; gap:10px; margin-top:30px; justify-content:center; }
+
+  .cm-stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:14px; margin-top:22px; }
+  .cm-stat { background:#fff; border-radius:16px; padding:16px; text-align:center; box-shadow:0 4px 15px rgba(0,0,0,.08); }
+  .cm-stat .n { font-size:26px; font-weight:800; color:#2563eb; }
+  .cm-stat .l { font-size:13px; color:#475569; }
+
+  .cm-estado { margin-top:22px; background:#f8fafc; padding:22px; border-radius:20px; border-left:8px solid #2563eb; }
+  .cm-barra { height:24px; background:#dbeafe; border-radius:20px; overflow:hidden; }
+  .cm-barra div { height:100%; width:0; background:linear-gradient(90deg,#2563eb,#06b6d4); transition:width 1s ease; border-radius:20px; }
+
+  .cm-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:18px; margin-top:22px; align-items:start; }
+  .cm-card { background:#fff; border-radius:20px; padding:24px; box-shadow:0 4px 15px rgba(0,0,0,.1);
+    border-top:6px solid #2563eb; transition:transform .3s, box-shadow .3s; position:relative; }
+  .cm-card:hover { transform:translateY(-6px); box-shadow:0 12px 26px rgba(37,99,235,.25); }
+  .cm-card .ic { font-size:44px; }
+  .cm-card h3 { margin:8px 0 6px; color:#1e3a8a; }
+  .cm-card p { margin:0 0 14px; color:#475569; line-height:1.5; font-size:15px; }
+  .cm-tag { position:absolute; top:14px; right:14px; font-size:12px; font-weight:700; padding:4px 10px; border-radius:20px; }
+  .cm-card.bloq { border-top-color:#94a3b8; background:#f1f5f9; }
+  .cm-card.bloq .ic, .cm-card.bloq h3 { filter:grayscale(1); opacity:.5; }
+  .cm-card.bloq .cm-tag { background:#e2e8f0; color:#64748b; }
+  .cm-card.disp .cm-tag { background:#fef3c7; color:#b45309; }
+  .cm-card.disp { animation:cmLatido 2.5s infinite; }
+  @keyframes cmLatido { 0%,100%{box-shadow:0 4px 15px rgba(0,0,0,.1)} 50%{box-shadow:0 0 0 6px rgba(251,191,36,.35)} }
+  .cm-card.ok { border-top-color:#16a34a; background:#f0fdf4; }
+  .cm-card.ok .cm-tag { background:#dcfce7; color:#166534; }
+
+  .cm-btn { display:inline-block; border:0; cursor:pointer; padding:10px 20px; border-radius:30px; font-size:15px;
+    font-weight:700; color:#fff; background:linear-gradient(90deg,#2563eb,#06b6d4); text-decoration:none; transition:transform .2s; font-family:inherit; }
+  .cm-btn:hover { transform:scale(1.06); }
+  .cm-btn.sec { background:#e2e8f0; color:#1e3a8a; }
+  .cm-btn.act { background:linear-gradient(90deg,#f59e0b,#fbbf24); color:#0b1f4d; }
+  .cm-btn[disabled] { background:#cbd5e1; color:#64748b; cursor:not-allowed; transform:none; }
+
+  .cm-panel { margin-top:16px; padding-top:16px; border-top:2px dashed #cbd5e1; animation:cmEntra .3s ease; }
+  @keyframes cmEntra { from{transform:translateY(-8px);opacity:0} to{transform:translateY(0);opacity:1} }
+  .cm-panel b { display:block; margin:14px 0 6px; color:#0f172a; }
+  .cm-op { display:block; width:100%; text-align:left; margin:8px 0; padding:12px 16px; border-radius:12px;
+    border:2px solid #cbd5e1; background:#f8fafc; cursor:pointer; font-size:15px; transition:all .2s; font-family:inherit; color:#0f172a; }
+  .cm-op:hover { border-color:#2563eb; background:#dbeafe; transform:translateX(5px); }
+  .cm-op.bien { background:#dcfce7; border-color:#16a34a; }
+  .cm-op.mal { background:#fee2e2; border-color:#dc2626; animation:cmSacude .4s; }
+  @keyframes cmSacude { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-8px)} 75%{transform:translateX(8px)} }
+  .cm-msg { margin-top:10px; font-weight:600; min-height:22px; }
+
+  .cm-ins { margin-top:26px; background:#fff; padding:24px; border-radius:20px; box-shadow:0 4px 15px rgba(0,0,0,.08); }
+  .cm-insg { display:flex; flex-wrap:wrap; gap:12px; }
+  .cm-i { flex:1 1 130px; text-align:center; padding:14px 8px; border-radius:14px; background:#f1f5f9; border:2px dashed #cbd5e1; }
+  .cm-i .e { font-size:34px; filter:grayscale(1); opacity:.4; }
+  .cm-i small { display:block; font-size:12px; color:#64748b; margin-top:4px; }
+  .cm-i.on { background:#fef9c3; border:2px solid #eab308; }
+  .cm-i.on .e { filter:none; opacity:1; animation:cmGiro .7s; }
+  @keyframes cmGiro { from{transform:rotateY(0)} to{transform:rotateY(360deg)} }
+
+  .cm-final { display:none; margin-top:26px; background:linear-gradient(135deg,#fbbf24,#f59e0b); color:#0b1f4d;
+    padding:28px; border-radius:20px; text-align:center; background-size:200% 200%; animation:cmFondo 4s ease infinite; }
+  .cm-final h2 { font-size:28px; }
+
+  .cm-reset { margin-top:20px; text-align:center; }
+  .cm-reset button { background:none; border:0; color:#94a3b8; cursor:pointer; text-decoration:underline; font-size:13px; }
+
+  @media (max-width:600px){ .cm-top h1{font-size:24px} }
+</style>
+</head>
+<body>
+
+<div class="cm">
+
+  <div class="cm-top">
+    <h1>🎯 Misiones</h1>
+    <p>Completa las misiones en orden, gana Puntos de Justicia y asciende hasta Magistrado Digital.</p>
+  </div>
+
+  <div class="cm-stats">
+    <div class="cm-stat"><div class="n" id="sRango">Recluta Digital</div><div class="l">🎖️ Rango actual</div></div>
+    <div class="cm-stat"><div class="n" id="sPuntos">0</div><div class="l">⭐ Puntos de Justicia</div></div>
+    <div class="cm-stat"><div class="n" id="sMis">0 / 4</div><div class="l">🎯 Misiones completadas</div></div>
+  </div>
+
+  <div class="cm-estado">
+    <h2>📈 Progreso hacia Magistrado Digital</h2>
+    <div class="cm-barra"><div id="barra"></div></div>
+    <p style="margin:10px 0 0" id="txtBarra">0% completado</p>
+  </div>
+
+  <div class="cm-grid" id="misiones"></div>
+
+  <div class="cm-ins">
+    <h2>🏅 Mis insignias</h2>
+    <div class="cm-insg" id="insignias"></div>
+  </div>
+
+  <div class="cm-final" id="final">
+    <h2>👑 ¡Felicidades, Magistrado Digital!</h2>
+    <p>Has completado todas las misiones del programa. Eres un Guardián Digital de la Justicia.</p>
+  </div>
+
+  <div class="cm-reset"><button id="reiniciar" type="button">Reiniciar mi progreso</button></div>
+
+  <div class="cm-nav">
+    <a class="cm-volver" href="https://sites.google.com/view/act2gamification-robertobg/inicio" target="_blank" rel="noopener noreferrer">← Volver a Inicio</a>
+    <a class="cm-volver" href="https://sites.google.com/view/act2gamification-robertobg/centro-de-mando-judicial" target="_blank" rel="noopener noreferrer">← Volver al Centro de Mando</a>
+  </div>
+</div>
+
+<script>
+(function () {
+  // ====== CONFIGURACIÓN: edita aquí tus misiones ======
+  var MISIONES = [
+    { id:1, icono:'🛡️', titulo:'Misión 1: Guardián Digital', puntos:100, insignia:'Guardián Digital',
+      desc:'Da tus primeros pasos en la digitalización judicial y resuelve tu primer caso.',
+      enlace:'https://rob566924.github.io/Digitaliza-1-caso/',
+      pregunta:'¿Cuál es una ventaja principal de digitalizar un expediente judicial?',
+      opciones:['Facilita la consulta rápida y la trazabilidad','Elimina la necesidad de proteger la información','Impide que otras personas autorizadas lo consulten'], correcta:0 },
+    { id:2, icono:'🔐', titulo:'Misión 2: Protector de Datos', puntos:100, insignia:'Protector de Datos',
+      desc:'Aprende a proteger la información sensible y los datos personales en el entorno judicial.',
+      enlace:'https://rob566924.github.io/Protector-de-datos/',
+      pregunta:'¿Cuál es una buena práctica para proteger información judicial sensible?',
+      opciones:['Compartir contraseñas con compañeros de confianza','Usar contraseñas robustas y acceso restringido','Enviar expedientes por cualquier chat personal'], correcta:1 },
+    { id:3, icono:'💡', titulo:'Misión 3: Innovador Digital', puntos:100, insignia:'Innovador Digital',
+      desc:'Impulsa la transformación digital y propón mejoras tecnológicas para la justicia.',
+      enlace:'https://rob566924.github.io/Innovador-judicial/',
+      pregunta:'¿Qué caracteriza a una innovación tecnológica útil en justicia?',
+      opciones:['Que sea compleja y difícil de usar','Que mejore eficiencia, transparencia y seguridad','Que reduzca la protección de datos'], correcta:1 },
+    { id:4, icono:'🏛️', titulo:'Misión 4: Magistrado Judicial', puntos:150, insignia:'Magistrado Judicial',
+      desc:'Reflexiona sobre el uso responsable y ético de la tecnología en la función judicial.',
+      enlace:'https://rob566924.github.io/Magdo-digital/',
+      pregunta:'Un funcionario recibe un documento reservado por error. ¿Qué debe hacer?',
+      opciones:['Difundirlo para que otros lo revisen','Guardarlo sin avisar a nadie','Reportarlo y resguardar su confidencialidad'], correcta:2 }
+  ];
+  var RANGOS = ['Recluta Digital','Guardián Digital','Protector de Datos','Innovador Judicial','Magistrado Digital'];
+  var CLAVE = 'guardianes_progreso_v1';
+  // =====================================================
+
+  var completadas = [];
+  var activa = null; // {id, repaso, resuelta, malIdx, msg, ok}
+
+  function cargar() {
+    try {
+      var d = localStorage.getItem(CLAVE);
+      var arr = d ? JSON.parse(d) : [];
+      completadas = Array.isArray(arr) ? arr : [];
+    } catch (e) { completadas = []; }
+  }
+  function guardar() {
+    try { localStorage.setItem(CLAVE, JSON.stringify(completadas)); } catch (e) {}
+  }
+  function $(id) { return document.getElementById(id); }
+
+  function panel(m) {
+    var p = document.createElement('div');
+    p.className = 'cm-panel';
+    var a = document.createElement('a');
+    a.className = 'cm-btn act'; a.href = m.enlace; a.target = '_blank'; a.rel = 'noopener noreferrer';
+    a.textContent = '📖 Abrir la actividad';
+    p.appendChild(a);
+    var q = document.createElement('b'); q.textContent = '❓ ' + m.pregunta; p.appendChild(q);
+    m.opciones.forEach(function (t, i) {
+      var o = document.createElement('button'); o.type = 'button';
+      o.className = 'cm-op' + (activa.resuelta && i === m.correcta ? ' bien' : '') + (activa.malIdx === i ? ' mal' : '');
+      o.textContent = t;
+      o.addEventListener('click', function () { responder(m, i); });
+      p.appendChild(o);
+    });
+    var msg = document.createElement('div'); msg.className = 'cm-msg';
+    msg.style.color = activa.ok ? '#166534' : '#b91c1c';
+    msg.textContent = activa.msg || '';
+    p.appendChild(msg);
+    var c = document.createElement('button'); c.type = 'button'; c.className = 'cm-btn sec'; c.textContent = 'Cerrar';
+    c.addEventListener('click', function () { activa = null; render(); });
+    p.appendChild(c);
+    return p;
+  }
+
+  function responder(m, i) {
+    if (activa.resuelta) return;
+    if (i === m.correcta) {
+      activa.resuelta = true; activa.malIdx = null; activa.ok = true;
+      cargar(); // relee por si hubo cambios desde otra pestaña
+      if (!activa.repaso && completadas.indexOf(m.id) < 0) {
+        completadas.push(m.id); guardar();
+        activa.msg = '🎉 ¡Correcto! Ganaste ' + m.puntos + ' puntos y la insignia "' + m.insignia + '".';
+      } else { activa.msg = '✔ ¡Correcto!'; }
+    } else {
+      activa.malIdx = i; activa.ok = false;
+      activa.msg = '❌ Respuesta incorrecta. Revisa la actividad e inténtalo de nuevo.';
+    }
+    render();
+  }
+
+  function render() {
+    var cont = $('misiones'); cont.innerHTML = '';
+    var puntos = 0;
+    MISIONES.forEach(function (m, i) {
+      var hecha = completadas.indexOf(m.id) > -1;
+      var libre = i === 0 || completadas.indexOf(MISIONES[i - 1].id) > -1;
+      if (hecha) puntos += m.puntos;
+      var estado = hecha ? 'ok' : (libre ? 'disp' : 'bloq');
+      var etiqueta = hecha ? '✔ Completada' : (libre ? '⚡ Disponible' : '🔒 Bloqueada');
+      var d = document.createElement('div');
+      d.className = 'cm-card ' + estado;
+      d.innerHTML = '<span class="cm-tag">' + etiqueta + '</span><div class="ic">' + m.icono + '</div>' +
+        '<h3>' + m.titulo + '</h3><p>' + m.desc + '</p><p><b>⭐ +' + m.puntos + ' puntos</b></p>';
+      var b = document.createElement('button'); b.type = 'button'; b.className = 'cm-btn';
+      if (hecha) b.textContent = 'Repasar misión';
+      else if (libre) b.textContent = '▶ Iniciar misión';
+      else { b.textContent = 'Completa la anterior'; b.disabled = true; }
+      if (!b.disabled) b.addEventListener('click', function () {
+        activa = {id:m.id, repaso:hecha, resuelta:false, malIdx:null, msg:'', ok:false}; render();
+      });
+      d.appendChild(b);
+      if (activa && activa.id === m.id) d.appendChild(panel(m));
+      cont.appendChild(d);
+    });
+
+    var n = completadas.length, total = MISIONES.length;
+    var pct = Math.round(n / total * 100);
+    $('sRango').textContent = RANGOS[Math.min(n, RANGOS.length - 1)];
+    $('sPuntos').textContent = puntos;
+    $('sMis').textContent = n + ' / ' + total;
+    $('barra').style.width = pct + '%';
+    $('txtBarra').textContent = pct + '% completado';
+
+    var ins = $('insignias'); ins.innerHTML = '';
+    MISIONES.forEach(function (m) {
+      var on = completadas.indexOf(m.id) > -1;
+      var e = document.createElement('div');
+      e.className = 'cm-i' + (on ? ' on' : '');
+      e.innerHTML = '<div class="e">' + m.icono + '</div><b>' + m.insignia + '</b><small>' + (on ? 'Obtenida' : 'Bloqueada') + '</small>';
+      ins.appendChild(e);
+    });
+    $('final').style.display = n >= total ? 'block' : 'none';
+  }
+
+  // Reinicio con doble clic (confirm() puede estar bloqueado dentro de un iframe)
+  var btnReset = $('reiniciar'), timerReset = null;
+  btnReset.addEventListener('click', function () {
+    if (!timerReset) {
+      btnReset.textContent = '¿Seguro? Haz clic otra vez para confirmar';
+      timerReset = setTimeout(function () { btnReset.textContent = 'Reiniciar mi progreso'; timerReset = null; }, 4000);
+    } else {
+      clearTimeout(timerReset); timerReset = null;
+      btnReset.textContent = 'Reiniciar mi progreso';
+      completadas = []; activa = null; guardar(); render();
+    }
+  });
+
+  cargar(); render();
+})();
+</script>
+</body>
+</html>
